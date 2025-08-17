@@ -1,6 +1,7 @@
 package Store_Inventory;
 
 import java.util.ArrayList;
+import java.util.List;
 import java.util.Scanner;
 
 public class Main {
@@ -19,8 +20,9 @@ public class Main {
         
         printHomeStock();
         
-        calculateTotalRevenueByCategory();
+        printRevenueAndHighestCategory();
         
+        printProductNamesSorted();
     }
     
     public void printElectronicStock(){
@@ -72,7 +74,7 @@ public class Main {
         inventory.increasePrice();
     }
     
-    public void calculateTotalRevenueByCategory() {
+    public void printRevenueAndHighestCategory() {
         ArrayList<Product> products = inventory.getProducts(); 
 
         double totalElectronic = 0;
@@ -91,10 +93,37 @@ public class Main {
 
         System.out.println("\nTotal Revenue Electronic: " + totalElectronic);
         System.out.println("Total Revenue Home: " + totalHome);
+
+        if (totalElectronic > totalHome) {
+            System.out.println("Category with highest revenue: Electronic");
+        } else if (totalHome > totalElectronic) {
+            System.out.println("Category with highest revenue: Home");
+        } else {
+            System.out.println("Both categories have the same revenue.");
+        }
+    }
+
+    public void printProductNamesSorted() {
+        ArrayList<Product> products = inventory.getProducts();
+
+        
+        products.sort((p1, p2) -> {
+            int priceCompare = Double.compare(p2.getPrice(), p1.getPrice()); 
+            if (priceCompare == 0) {
+                return Integer.compare(p1.getStock(), p2.getStock()); 
+            }
+            return priceCompare;
+        });
+
+        System.out.println("\nProducts sorted by price");
+        for (Product p : products) {
+            System.out.println("Name: " + p.getName() + 
+                               ", Price: " + p.getPrice() + 
+                               ", Stock: " + p.getStock());
+        }
     }
 
 
-    
     public static void main(String[] args) {
         Main execute = new Main();
         execute.system();
